@@ -164,6 +164,10 @@ Customers use `ecompjr/dokploy-action@release` or a specific commit from that br
 
 The publishing job uses the built-in `GITHUB_TOKEN` with `contents: write`; no extra secret is needed. Repository rules must allow that token to push to `release`. Pushes made with this token do not start recursive workflow runs ([GitHub documentation](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)). A failed build or validation leaves the published branch unchanged.
 
+## Disclaimer
+
+Disclaimer: Dokploy Offload is an independent, community-developed GitHub Action maintained by EcompJr. It is not affiliated with, endorsed by, sponsored by, or officially maintained by Dokploy. Dokploy is a trademark of its respective owner.
+
 ## License
 
 Dokploy Offload is licensed under the [BSD 3-Clause License](LICENSE). Copyright (c) 2026, EcompJr - UEFS. See the license for redistribution conditions and the warranty disclaimer.

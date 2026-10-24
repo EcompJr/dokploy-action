@@ -164,6 +164,10 @@ Os consumidores usam `ecompjr/dokploy-action@release` ou um commit específico d
 
 O job de publicação usa o `GITHUB_TOKEN` integrado com `contents: write`; nenhum secret adicional é necessário. As regras do repositório devem permitir que esse token envie commits para `release`. Pushes feitos com esse token não iniciam execuções recursivas de workflows ([documentação do GitHub](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)). Uma falha no build ou na validação mantém a branch publicada inalterada.
 
+## Aviso legal
+
+Aviso legal: Dokploy Offload é uma GitHub Action independente, desenvolvida pela comunidade e mantida pela EcompJr. Não possui afiliação com o Dokploy, nem é endossada, patrocinada ou mantida oficialmente por ele. Dokploy é uma marca comercial de seu respectivo proprietário.
+
 ## Licença
 
 O Dokploy Offload é licenciado sob a [Licença BSD 3-Clause](LICENSE). Copyright (c) 2026, EcompJr - UEFS. Consulte a licença para conhecer as condições de redistribuição e a isenção de garantias.
