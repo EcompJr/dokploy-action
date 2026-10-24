@@ -9,6 +9,11 @@
 </p>
 
 <p align="center">
+  <strong>English</strong> ·
+  <a href="README.pt-BR.md" lang="pt-BR">Português brasileiro</a>
+</p>
+
+<p align="center">
   <a href="#quick-start">Quick start</a> ·
   <a href="#examples-by-application-layout">Examples</a> ·
   <a href="#inputs">Inputs</a> ·
