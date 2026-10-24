@@ -1,12 +1,11 @@
+<p align="center">
+  <img src="cover.png" alt="Dokploy Offload: build Docker images on GitHub Actions, publish to GHCR, and deploy to your VPS with Dokploy." width="1280" />
+</p>
 
 <h1 align="center">Dokploy Offload</h1>
 
 <p align="center">
   <strong>Dokploy Offload ※ Build on GitHub • Keep your VPS serving.</strong>
-</p>
-
-<p align="center">
-  <img src="cover.png" alt="Dokploy Offload: build Docker images on GitHub Actions, publish to GHCR, and deploy to your VPS with Dokploy." width="1280" />
 </p>
 
 <p align="center">
