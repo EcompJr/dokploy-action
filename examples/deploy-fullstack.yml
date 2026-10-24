@@ -1,0 +1,29 @@
+name: Deploy fullstack
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ecompjr/dokploy-action@release
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          webhook-url: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
+          services: fullstack
+          fullstack-context: .
+          fullstack-file: Dockerfile

@@ -1,0 +1,8 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+
+# Generated locally and published by CI to the release branch.
+/scripts/
