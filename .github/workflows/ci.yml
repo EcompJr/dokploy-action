@@ -1,0 +1,69 @@
+name: Validate action
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.12"
+      - run: bun install --frozen-lockfile
+      - run: bun run test
+      - name: Verify published JavaScript on Node
+        run: node --test
+      - uses: docker://rhysd/actionlint:1.7.7
+
+  publish:
+    name: Publish compiled action
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: publish-release
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.12"
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - name: Commit and push compiled action to release
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          if [ "$(git rev-parse origin/main)" != "$GITHUB_SHA" ]; then
+            echo "A newer main commit exists; skipping this publication."
+            exit 0
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add --force scripts/
+          release_tree=$(git write-tree)
+          release_parents=()
+          if git show-ref --verify --quiet refs/remotes/origin/release; then
+            release_parents=(-p "$(git rev-parse origin/release)")
+          fi
+          release_commit=$(git commit-tree "$release_tree" "${release_parents[@]}" \
+            -m "Build action from $GITHUB_SHA")
+          git push origin "$release_commit:refs/heads/release"

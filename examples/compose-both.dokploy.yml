@@ -1,0 +1,15 @@
+# Copy to compose.dokploy.yml at the calling project root.
+# Replace owner/repository and adjust ports for your images.
+services:
+  backend:
+    image: ghcr.io/owner/repository-backend:latest
+    restart: unless-stopped
+    expose:
+      - "8000"
+  frontend:
+    image: ghcr.io/owner/repository-frontend:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
