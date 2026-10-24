@@ -1,17 +1,35 @@
-# Dokploy Offload
 
-**Dokploy Offload ※ Build on GitHub • Keep your VPS serving.**
+<h1 align="center">Dokploy Offload</h1>
 
-[BSD 3-Clause licensed](LICENSE) · [GitHub repository](https://github.com/EcompJr/dokploy-action)
+<p align="center">
+  <strong>Dokploy Offload ※ Build on GitHub • Keep your VPS serving.</strong>
+</p>
+
+<p align="center">
+  <img src="cover.png" alt="Dokploy Offload: build Docker images on GitHub Actions, publish to GHCR, and deploy to your VPS with Dokploy." width="1280" />
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#examples-by-application-layout">Examples</a> ·
+  <a href="#inputs">Inputs</a> ·
+  <a href="#published-images-and-deployment-behavior">Deployment behavior</a> ·
+  <a href="LICENSE">BSD 3-Clause</a>
+</p>
+
+---
 
 Dokploy Offload moves Docker builds from your production VPS to GitHub Actions. It builds your application images, publishes them to GitHub Container Registry (GHCR), and triggers Dokploy to pull and run them. Give your server more room for live traffic by keeping dependency installation, compilation, and asset bundling on GitHub runners.
 
 Built for developers and small teams deploying with Dokploy, especially when several applications share a resource-constrained VPS.
 
-- **Reduce deployment load:** move CPU, memory, and disk-intensive build work off your VPS.
-- **Fit your application:** deploy one fullstack image, a backend, a frontend, or both services.
-- **Publish before deploying:** the webhook runs only after every selected image publishes successfully.
-- **Use your existing workflow:** Dockerfiles, GitHub Actions, GHCR, and a Dokploy webhook; no Dokploy API key or SSH access required.
+| More room for live traffic | A fit for your application |
+| --- | --- |
+| Move CPU, memory, and disk-intensive builds off your VPS. | Deploy one fullstack image, a backend, a frontend, or both services. |
+| **Publish before deploying** | **Use your existing workflow** |
+| Call the webhook only after every selected image publishes successfully. | Use Dockerfiles, GitHub Actions, GHCR, and a Dokploy webhook. No Dokploy API key or SSH access required. |
+
+### Build → Publish → Deploy
 
 ```mermaid
 flowchart LR
@@ -33,12 +51,17 @@ The VPS still needs resources to download images and start containers, but it no
 
 ## Quick start
 
-The checked-out calling project must contain `compose.dokploy.yml` or `compose.dokploy.yaml` at its root. The action checks for a file before building or publishing any images and fails if neither is present.
+> [!IMPORTANT]
+> The checked-out calling project must contain `compose.dokploy.yml` or `compose.dokploy.yaml` at its root. The action checks for a file before building or publishing any images and fails if neither is present.
+
+### 1. Prepare your application and Dokploy
 
 1. Each selected service needs a Dockerfile. For `fullstack`, the defaults are `Dockerfile` and the repository root as context. Separate services default to `backend/Dockerfile` and `frontend/Dockerfile`, with their respective directories as build contexts. Application compilation belongs in the Dockerfile, so the server only pulls the finished image.
 2. Configure Dokploy to pull the published images. For separate applications, select Docker as the source and use `ghcr.io/owner/repository-backend:latest` and/or `ghcr.io/owner/repository-frontend:latest`. For a shared Compose deployment, reference those images in Compose; do not configure server-side builds. Enable Auto Deploy and copy the deployment webhook URL.
 3. Store the URL as the Actions secret `DOKPLOY_WEBHOOK_URL`, as shown in [examples/deploy.yml](examples/deploy.yml). The URL must point to a deployment that manages every selected service; the action cannot change which services a Compose webhook deploys.
 4. Copy the example into your application's `.github/workflows/deploy.yml`. Use `ecompjr/dokploy-action@release` for the latest successful build of `main`, or pin a commit from the `release` branch. The branch becomes available after the first successful CI publication.
+
+### 2. Add the action to your workflow
 
 ```yaml
 permissions:
@@ -54,6 +77,8 @@ steps:
       services: both
       webhook-url: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
 ```
+
+### 3. Allow registry access
 
 No Dokploy API key, application ID, SSH access, or additional publishing token is required. GitHub supplies `GITHUB_TOKEN`. Dokploy needs registry credentials to pull private GHCR packages; alternatively make the packages public. Existing packages must grant the calling repository Actions write access. Package visibility is managed in GitHub, not by this action.
 
@@ -84,7 +109,10 @@ Frontend build arguments are typically embedded in browser bundles. Use BuildKit
 
 For `EcompJr/example`, both mode publishes `ghcr.io/ecompjr/example-backend:latest` and `ghcr.io/ecompjr/example-frontend:latest`, plus `sha-<full-commit-sha>` tags. `fullstack` publishes only `ghcr.io/ecompjr/example-fullstack:latest`, also with a commit tag. `back` publishes only the backend image; `frontend` publishes only the frontend image. Outputs are `fullstack-image`, `backend-image`, `frontend-image`, and the corresponding `fullstack-digest`, `backend-digest`, and `frontend-digest`; unselected services have empty image outputs.
 
-All selected images must publish successfully before any webhook runs. The single webhook is called once, and a failed request fails the action. Requests use a GitHub push payload with a 120-second timeout. Only HTTP 2xx is accepted; redirects are rejected because Dokploy may use them for validation failures. Acceptance means a deployment was requested, not that the application became healthy.
+All selected images must publish successfully before any webhook runs. The single webhook is called once, and a failed request fails the action. Requests use a GitHub push payload with a 120-second timeout. Only HTTP 2xx is accepted; redirects are rejected because Dokploy may use them for validation failures.
+
+> [!NOTE]
+> An accepted webhook means a deployment was requested. It does not confirm application health.
 
 Publishing two images is not atomic. A failed second build can leave the first image's mutable tag updated, but the webhook is only called after all selected builds succeed. Serialize workflows that publish the same tags, as in the example. Use a different tag and concurrency group for each environment. Do not call this action for untrusted pull requests.
 
