@@ -13,9 +13,10 @@ Built for developers and small teams deploying with Dokploy, especially when sev
 - **Publish before deploying:** the webhook runs only after every selected image publishes successfully.
 - **Use your existing workflow:** Dockerfiles, GitHub Actions, GHCR, and a Dokploy webhook; no Dokploy API key or SSH access required.
 
-```text
-GitHub Actions              GHCR                    Your VPS
-Build Docker images   →     Store images     →      Dokploy pulls and runs
+```mermaid
+flowchart LR
+    A[GitHub Actions: Build Docker images] --> B[GHCR: Store published images]
+    B --> C[Dokploy on your VPS: Pull and run images]
 ```
 
 Select `fullstack`, `both` (default), `back`, or `frontend`. `backend` remains an alias for `back`. The action is used as `ecompjr/dokploy-action@release`; its repository path is unchanged.
