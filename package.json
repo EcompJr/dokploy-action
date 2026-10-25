@@ -4,7 +4,7 @@
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.com/EcompJr/dokploy-action.git"
+    "url": "https://github.com/EcompJr/dokploy-offload-action.git"
   },
   "private": true,
   "type": "module",

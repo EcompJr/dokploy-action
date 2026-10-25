@@ -4,7 +4,7 @@
 
 This project is **Dokploy Offload**: a composite GitHub Action that builds Docker images on GitHub Actions, publishes them to GHCR, and triggers Dokploy. Read [PRODUCT.md](PRODUCT.md) for positioning and product boundaries. The central benefit is keeping resource-intensive builds off the production VPS.
 
-Keep the public action reference `ecompjr/dokploy-action@release` consistent throughout documentation and examples. The display name and repository identifier serve different purposes.
+Keep the public action reference `ecompjr/dokploy-offload-action@release` consistent throughout documentation and examples. The display name and repository identifier serve different purposes.
 
 ## Implementation and compatibility
 

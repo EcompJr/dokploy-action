@@ -41,7 +41,7 @@ flowchart LR
     B --> C[Dokploy na VPS: Baixar e executar imagens]
 ```
 
-Selecione `fullstack`, `both` (padrão), `back` ou `frontend`. `backend` continua sendo um alias de `back`. Use a action como `ecompjr/dokploy-action@release`; o caminho do repositório permanece o mesmo.
+Selecione `fullstack`, `both` (padrão), `back` ou `frontend`. `backend` continua sendo um alias de `back`. Use a action como `ecompjr/dokploy-offload-action@release`.
 
 Consulte [PRODUCT.md](PRODUCT.md) para conhecer a direção do produto e [AGENTS.md](AGENTS.md) para as orientações de contribuição ao repositório.
 
@@ -63,7 +63,7 @@ A VPS ainda precisa de recursos para baixar imagens e iniciar contêineres, mas 
 1. Cada serviço selecionado precisa de um Dockerfile. Para `fullstack`, os padrões são `Dockerfile` e a raiz do repositório como contexto. Serviços separados usam, por padrão, `backend/Dockerfile` e `frontend/Dockerfile`, com os respectivos diretórios como contextos de build. A compilação da aplicação deve acontecer no Dockerfile, para que o servidor apenas baixe a imagem pronta.
 2. Configure o Dokploy para baixar as imagens publicadas. Para aplicações separadas, selecione Docker como fonte e use `ghcr.io/owner/repository-backend:latest` e/ou `ghcr.io/owner/repository-frontend:latest`. Para uma implantação compartilhada com Compose, referencie essas imagens no Compose; não configure builds no servidor. Ative o Auto Deploy e copie a URL do webhook de implantação.
 3. Salve a URL no secret do Actions `DOKPLOY_WEBHOOK_URL`, como em [examples/deploy.yml](examples/deploy.yml). A URL deve apontar para uma implantação que gerencie todos os serviços selecionados; a action não altera quais serviços um webhook do Compose implanta.
-4. Copie o exemplo para `.github/workflows/deploy.yml` na sua aplicação. Use `ecompjr/dokploy-action@release` para o último build bem-sucedido de `main`, ou fixe um commit da branch `release`. Essa branch fica disponível após a primeira publicação bem-sucedida pela CI.
+4. Copie o exemplo para `.github/workflows/deploy.yml` na sua aplicação. Use `ecompjr/dokploy-offload-action@release` para o último build bem-sucedido de `main`, ou fixe um commit da branch `release`. Essa branch fica disponível após a primeira publicação bem-sucedida pela CI.
 
 ### 2. Adicione a action ao workflow
 
@@ -75,7 +75,7 @@ permissions:
 # Dentro de um job executado em ubuntu-latest:
 steps:
   - uses: actions/checkout@v5
-  - uses: ecompjr/dokploy-action@release
+  - uses: ecompjr/dokploy-offload-action@release
     with:
       github-token: ${{ secrets.GITHUB_TOKEN }}
       services: both
@@ -160,7 +160,7 @@ Referências: [Configuração de registros no Dokploy](https://docs.dokploy.com/
 
 Cada push para `main` instala as dependências de `bun.lock` usando o [modo de lockfile congelado do Bun](https://bun.sh/docs/pm/cli/install) e executa os testes e o actionlint. Após a validação bem-sucedida, a CI compila o TypeScript e envia um novo commit com os arquivos do repositório e o diretório `scripts/` compilado para a branch `release`. Essa branch mantém seu próprio histórico de builds; cada mensagem de commit registra o SHA de origem. A publicação é serializada, e execuções desatualizadas pulam a publicação quando `main` já avançou.
 
-Os consumidores usam `ecompjr/dokploy-action@release` ou um commit específico dessa branch. A CI deles executa diretamente o JavaScript compilado, sem instalar as dependências desta action nem compilar TypeScript. `@main` contém apenas o código-fonte e não é uma distribuição executável. Tags de versão como `v1` não são criadas nem movidas automaticamente.
+Os consumidores usam `ecompjr/dokploy-offload-action@release` ou um commit específico dessa branch. A CI deles executa diretamente o JavaScript compilado, sem instalar as dependências desta action nem compilar TypeScript. `@main` contém apenas o código-fonte e não é uma distribuição executável. Tags de versão como `v1` não são criadas nem movidas automaticamente.
 
 O job de publicação usa o `GITHUB_TOKEN` integrado com `contents: write`; nenhum secret adicional é necessário. As regras do repositório devem permitir que esse token envie commits para `release`. Pushes feitos com esse token não iniciam execuções recursivas de workflows ([documentação do GitHub](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)). Uma falha no build ou na validação mantém a branch publicada inalterada.
 
