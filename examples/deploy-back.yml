@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
-      - uses: ecompjr/dokploy-action@release
+      - uses: ecompjr/dokploy-offload-action@release
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           webhook-url: ${{ secrets.DOKPLOY_WEBHOOK_URL }}

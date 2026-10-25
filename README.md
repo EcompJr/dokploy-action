@@ -41,7 +41,7 @@ flowchart LR
     B --> C[Dokploy on your VPS: Pull and run images]
 ```
 
-Select `fullstack`, `both` (default), `back`, or `frontend`. `backend` remains an alias for `back`. The action is used as `ecompjr/dokploy-action@release`; its repository path is unchanged.
+Select `fullstack`, `both` (default), `back`, or `frontend`. `backend` remains an alias for `back`. The action is used as `ecompjr/dokploy-offload-action@release`.
 
 See [PRODUCT.md](PRODUCT.md) for the product direction and [AGENTS.md](AGENTS.md) for repository contribution guidance.
 
@@ -63,7 +63,7 @@ The VPS still needs resources to download images and start containers, but it no
 1. Each selected service needs a Dockerfile. For `fullstack`, the defaults are `Dockerfile` and the repository root as context. Separate services default to `backend/Dockerfile` and `frontend/Dockerfile`, with their respective directories as build contexts. Application compilation belongs in the Dockerfile, so the server only pulls the finished image.
 2. Configure Dokploy to pull the published images. For separate applications, select Docker as the source and use `ghcr.io/owner/repository-backend:latest` and/or `ghcr.io/owner/repository-frontend:latest`. For a shared Compose deployment, reference those images in Compose; do not configure server-side builds. Enable Auto Deploy and copy the deployment webhook URL.
 3. Store the URL as the Actions secret `DOKPLOY_WEBHOOK_URL`, as shown in [examples/deploy.yml](examples/deploy.yml). The URL must point to a deployment that manages every selected service; the action cannot change which services a Compose webhook deploys.
-4. Copy the example into your application's `.github/workflows/deploy.yml`. Use `ecompjr/dokploy-action@release` for the latest successful build of `main`, or pin a commit from the `release` branch. The branch becomes available after the first successful CI publication.
+4. Copy the example into your application's `.github/workflows/deploy.yml`. Use `ecompjr/dokploy-offload-action@release` for the latest successful build of `main`, or pin a commit from the `release` branch. The branch becomes available after the first successful CI publication.
 
 ### 2. Add the action to your workflow
 
@@ -75,7 +75,7 @@ permissions:
 # Within a job running on ubuntu-latest:
 steps:
   - uses: actions/checkout@v5
-  - uses: ecompjr/dokploy-action@release
+  - uses: ecompjr/dokploy-offload-action@release
     with:
       github-token: ${{ secrets.GITHUB_TOKEN }}
       services: both
@@ -160,7 +160,7 @@ References: [Dokploy registry setup](https://docs.dokploy.com/docs/core/provider
 
 Each push to `main` installs dependencies from `bun.lock` using [Bun’s frozen lockfile mode](https://bun.sh/docs/pm/cli/install), then runs tests and actionlint. After validation succeeds, CI builds the TypeScript and pushes a new commit containing the repository files and compiled `scripts/` to the `release` branch. That branch keeps its own build history; each commit message records the source SHA. Publication is serialized, and outdated runs skip publication when `main` has advanced.
 
-Customers use `ecompjr/dokploy-action@release` or a specific commit from that branch. Their CI executes the compiled JavaScript directly, without installing this action's dependencies or compiling TypeScript. `@main` contains source only and is not a runnable distribution. Version tags such as `v1` are not created or moved automatically.
+Customers use `ecompjr/dokploy-offload-action@release` or a specific commit from that branch. Their CI executes the compiled JavaScript directly, without installing this action's dependencies or compiling TypeScript. `@main` contains source only and is not a runnable distribution. Version tags such as `v1` are not created or moved automatically.
 
 The publishing job uses the built-in `GITHUB_TOKEN` with `contents: write`; no extra secret is needed. Repository rules must allow that token to push to `release`. Pushes made with this token do not start recursive workflow runs ([GitHub documentation](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)). A failed build or validation leaves the published branch unchanged.
 

@@ -55,7 +55,7 @@ Short description: **Keep Docker builds off your VPS. Build on GitHub Actions, p
 
 Lead with reduced build load and a straightforward deployment workflow. Explain the mechanism: build on GitHub, publish to GHCR, then ask Dokploy to deploy. Use concrete language about dependency installation, compilation, and bundling instead of vague performance claims.
 
-The repository and action identifier remain `ecompjr/dokploy-action`. The product name does not require consumers to change their workflow references.
+The repository and action identifier are `ecompjr/dokploy-offload-action`. Consumers use `ecompjr/dokploy-offload-action@release` in their workflows.
 
 ## Product experience
 
