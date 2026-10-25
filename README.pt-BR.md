@@ -168,6 +168,12 @@ O job de publicação usa o `GITHUB_TOKEN` integrado com `contents: write`; nenh
 
 Aviso legal: Dokploy Offload é uma GitHub Action independente, desenvolvida pela comunidade e mantida pela EcompJr. Não possui afiliação com o Dokploy, nem é endossada, patrocinada ou mantida oficialmente por ele. Dokploy é uma marca comercial de seu respectivo proprietário.
 
+## Suporte, segurança e privacidade
+
+Para dúvidas e relatos de bugs, consulte [Suporte](SUPPORT.md). Relate vulnerabilidades pelo [processo de segurança](SECURITY.md). Leia o [aviso de privacidade](PRIVACY.md) para entender o tratamento de dados de build, credenciais, logs e metadados de implantação. O suporte não possui prazo de resposta garantido nem SLA de disponibilidade. Essas políticas estão disponíveis em inglês.
+
 ## Licença
 
 O Dokploy Offload é licenciado sob a [Licença BSD 3-Clause](LICENSE). Copyright (c) 2026, EcompJr - UEFS. Consulte a licença para conhecer as condições de redistribuição e a isenção de garantias.
+
+A [Licença BSD 3-Clause](LICENSE) rege os direitos dos usuários de usar, modificar e redistribuir esta action; ela é estabelecida entre os titulares dos direitos autorais e os usuários, não com o GitHub.

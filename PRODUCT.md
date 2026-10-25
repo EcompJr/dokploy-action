@@ -82,6 +82,10 @@ Image downloads and container startup still consume VPS resources. A successful 
 - Keep the README, action metadata, examples, and implementation consistent.
 - Preserve documented inputs, outputs, aliases, and release usage unless a compatibility change is deliberate and documented.
 
+## Support and data handling
+
+User support is documented in [SUPPORT.md](SUPPORT.md), private reporting in [SECURITY.md](SECURITY.md), and data flows and retention boundaries in [PRIVACY.md](PRIVACY.md). Do not promise response deadlines or an uptime SLA. The BSD-3-Clause [LICENSE](LICENSE) governs end-user use and redistribution. Maintainers must complete the organizational and operational checks in [MAINTENANCE.md](MAINTENANCE.md) before Marketplace publication.
+
 ## Evaluating improvements
 
 Prefer changes that make first setup easier, reduce configuration mistakes, clarify deployment failures, or improve build efficiency. Validate technical behavior with appropriate checks and real deployment evidence when available. Treat resource savings and deployment speed as workload-dependent outcomes, not established benchmarks.

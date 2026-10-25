@@ -168,6 +168,12 @@ The publishing job uses the built-in `GITHUB_TOKEN` with `contents: write`; no e
 
 Disclaimer: Dokploy Offload is an independent, community-developed GitHub Action maintained by EcompJr. It is not affiliated with, endorsed by, sponsored by, or officially maintained by Dokploy. Dokploy is a trademark of its respective owner.
 
+## Support, security, and privacy
+
+For questions and bug reports, see [Support](SUPPORT.md). Report vulnerabilities through the [security reporting process](SECURITY.md). Read the [privacy notice](PRIVACY.md) for build data, credentials, logs, and deployment metadata handling. Support has no guaranteed response time or uptime SLA.
+
 ## License
 
 Dokploy Offload is licensed under the [BSD 3-Clause License](LICENSE). Copyright (c) 2026, EcompJr - UEFS. See the license for redistribution conditions and the warranty disclaimer.
+
+The [BSD 3-Clause License](LICENSE) governs end users’ rights to use, modify, and redistribute this action; it is between the copyright holders and users, not GitHub.
